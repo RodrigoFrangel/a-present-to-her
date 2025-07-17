@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossa Constelação - 5 Anos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+
+        /* --- EFEITO PARALLAX --- */
+        .parallax-bg {
+            position: absolute;
+            width: 110%;
+            height: 110%;
+            top: -5%;
+            left: -5%;
+            background-image:
+                radial-gradient(1px 1px at 25% 25%, #fff, transparent),
+                radial-gradient(1px 1px at 50% 50%, #fff, transparent),
+                radial-gradient(0.5px 0.5px at 75% 75%, #fff, transparent);
+            background-size: 300px 300px;
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .parallax-bg.layer2 {
+            background-size: 600px 600px;
+            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        
+        .parallax-bg.layer3 {
+            background-image: radial-gradient(0.5px 0.5px at 10% 90%, #aaa, transparent);
+            background-size: 150px 150px;
+            opacity: 0.6;
+            transition: transform 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .parallax-bg.layer4 {
+            background-image: radial-gradient(0.25px 0.25px at 33% 66%, #999, transparent);
+            background-size: 80px 80px;
+            opacity: 0.5;
+            transition: transform 2.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* --- INTRODUÇÃO --- */
+        #intro {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #0d1117;
+            z-index: 100;
+            font-size: 1.5rem;
+            opacity: 1;
+            transition: opacity 2s ease-in-out;
+        }
+
+        #intro.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* --- CONSTELAÇÃO --- */
+        #sky {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease-in-out;
+            animation: pulse 3s infinite ease-in-out;
+        }
+        .star.default { width: 12px; height: 12px; background-color: #c9d1d9; }
+        .star.small { width: 8px; height: 8px; background-color: #a0a8b1; animation-duration: 4s; }
+        .star.large { width: 18px; height: 18px; background-color: #e6edf3; animation-duration: 2s; }
+
+        .star:hover {
+            transform: scale(2.2) !important;
+            box-shadow: 0 0 14px #00e1ff, 0 0 22px #00e1ff, 0 0 30px #00e1ff !important;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 8px rgba(0, 225, 255, 0.7); }
+            50% { transform: scale(1.15); box-shadow: 0 0 14px rgba(0, 225, 255, 1), 0 0 22px rgba(0, 225, 255, 0.8); }
+        }
+        
+        #constellation-lines {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+        }
+
+        #constellation-lines line {
+            stroke: rgba(0, 225, 255, 0.3);
+            stroke-width: 1.5px;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation-name: draw-line;
+            animation-fill-mode: forwards;
+            animation-timing-function: ease-in-out;
+        }
+
+        @keyframes draw-line { to { stroke-dashoffset: 0; } }
+
+        .star-tooltip {
+            position: absolute;
+            /* background-color: rgba(13, 17, 23, 0.9); */
+            /* backdrop-filter: blur(4px); */
+            color: #c9d1d9;
+            /* padding: 6px 12px; */
+            /* border-radius: 6px; */
+            font-size: 0.875rem;
+            pointer-events: none;
+            z-index: 10;
+            /* border: 1px solid rgba(48, 54, 61, 0.5); */
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            white-space: nowrap;
+        }
+
+        /* --- MODAIS --- */
+        .modal-overlay {
+            opacity: 1;
+            transition: opacity 0.4s ease-out;
+        }
+        
+        .modal-content {
+            background-color: rgba(22, 27, 34, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(48, 54, 61, 0.5);
+            opacity: 1;
+            transform: scale(1);
+            transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+        }
+
+        .modal-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modal-overlay.hidden .modal-content {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="intro">
+        <p>Desenhando a nossa história...</p>
+    </div>
+
+    <div class="parallax-bg layer1"></div>
+    <div class="parallax-bg layer2"></div>
+    <div class="parallax-bg layer3"></div>
+    <div class="parallax-bg layer4"></div>
+    <div id="sky">
+        <svg id="constellation-lines"></svg>
+    </div>
+
+    <div id="memoryModal" class="modal-overlay hidden fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4">
+        <div id="modalContent" class="modal-content text-[#c9d1d9] p-8 md:p-10 rounded-xl max-w-lg w-full shadow-2xl shadow-cyan-500/20 relative">
+            <button id="closeButton" aria-label="Fechar" class="absolute top-3 right-4 text-gray-400 text-4xl hover:text-cyan-400 transition-colors">&times;</button>
+            <small id="modalDate" class="block mb-4 text-gray-400 italic"></small>
+            <h2 id="modalTitle" class="text-2xl md:text-3xl font-bold text-cyan-400 mb-2 pb-2 border-b-2 border-cyan-400/50"></h2>
+            <p id="modalDescription" class="text-base md:text-lg leading-relaxed mt-4 whitespace-pre-line"></p>
+        </div>
+    </div>
+
+    <!-- 
+    <div id="letterModal" class="modal-overlay hidden fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4">
+        ... (conteúdo da carta) ...
+    </div>
+    -->
+
+    <div class="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3">
+        <!-- <button id="letterButton" ...>Ler minha carta pra você</button> -->
+    </div>
+    <div class="fixed bottom-4 left-4 z-50 flex items-center gap-3">
+        <button id="volumeControl" class="bg-cyan-600 text-white w-12 h-12 rounded-full shadow-lg hover:bg-cyan-500 transition flex items-center justify-center text-xl">
+            <i id="volumeIcon" class="fa-solid fa-volume-xmark"></i>
+        </button>
+    </div>
+
+    <audio id="bgMusic" src="leva-eternity.mp3" loop autoplay muted></audio>
+
+  <script>
+    const CONFIG = {
+        introFadeOutDelay: 2500,
+        lineDrawDuration: 0.4,
+    };
+
+    const memories = [
+        // Marcos do Relacionamento
+        { id: 1, date: '08/05/2020', title: 'A Primeira Mensagem', description: 'Graças à quarentena e a uma live no Instagram, você me viu e decidiu me seguir (logo antes de curtir todas as minhas fotos kkkkk). Mal sabia eu que isso mudaria minha vida pra sempre — e só pra melhor.', position: { top: '15%', left: '10%' }, size: 'default' },
+        { id: 2, date: '09/05/2020', title: 'Primeiro "Bom Dia" e sua Primeira Aula Comigo', description: 'Foi só o primeiro passo da nossa vida juntos. Um detalhe pequeno, mas que já deixava claro que havia algo único entre nós. Algo especial.', position: { top: '22%', left: '15%' }, size: 'default' },
+        { id: 3, date: '09/07/2020', title: 'O Primeiro "Eu te amo"', description: 'Depois dois meses, alguns “amo vc” despretensiosos e muitos coraçõezinhos, essas três palavras finalmente deram nome ao que a gente já sentia. ❤️', position: { top: '35%', left: '12%' }, size: 'default' },
+        { id: 4, date: '15/07/2020', title: 'Nosso Primeiro Encontro', description: 'Você dizendo “eu te amo” toda hora, a Saveiro caindo aos pedaços, o Protegio, e você "com calor" — foi o começo de algo único e absurdamente especial.', position: { top: '25%', left: '20%' }, size: 'default' },
+        { id: 5, date: '18/10/2020', title: 'Nós Pedalando no Lago', description: 'Nosso terceiro encontro e o dia em que te apresentei “Ponto de Exclamação”. Foi nesse momento que eu soube, com toda certeza, que você um dia seria minha esposa.', position: { top: '45%', left: '28%' }, size: 'default' },
+        { id: 6, date: '27/11/2020', title: 'Nossa Primeira Noite Juntos', description: 'Depois de meses falando sobre como queríamos dormir juntinhos... finalmente aconteceu. E foi, até então, a melhor noite da minha vida. ❤️', position: { top: '58%', left: '20%' }, size: 'default' },
+        { id: 7, date: '15/12/2020', title: 'Sua Primeira Noite na Minha Casa', description: 'Literalmente um sonho realizado. Uma casa só pra nós. Ter você ali comigo me deu a certeza de que eu tinha encontrado meu caminho.', position: { top: '68%', left: '30%' }, size: 'default' },
+        { id: 8, date: '26/01/2021', title: 'Nossa Viagem para a Praia', description: 'O apartamento, a varanda, a piscina (até o yakisoba com ingredientes ruins). Criar aquelas memórias contigo me fez sentir a pessoa mais sortuda e feliz do mundo.', position: { top: '80%', left: '22%' }, size: 'default' },
+        { id: 9, date: '26/04/2021', title: 'Nossas Alianças', description: 'Um gesto simples, mas cheio de significado. Até hoje, usar esse anel me lembra do que temos: amor, parceria e rumo.', position: { top: '85%', left: '40%' }, size: 'default' },
+        { id: 10, date: '21/07/2021', title: 'Você se Mudou Comigo', description: 'O dia em que “minha casa” virou “nossa casa”. Ter você comigo todos os dias era tudo o que eu queria — e ainda é.', position: { top: '80%', left: '60%' }, size: 'default' },
+        { id: 11, date: '07/11/2021', title: 'Abrimos Nosso Relacionamento', description: 'Começou com uma mensagem de madrugada, mas abriu espaço para algo que já sabiamos que estava fadado a acontecer. Abrir nosso relacionamento deixou tudo mais leve, saudável e melhor.', position: { top: '65%', left: '70%' }, size: 'default' },
+        { id: 12, date: '28/01/2022', title: 'A Chegada da Kira', description: 'Nossa família começou quando nosso menino chegou 💕. Com o rabinho torto e o pintinho no queixo... ele virou nosso bem mais precioso nesse mundo.', position: { top: '50%', left: '85%' }, size: 'default' },
+        { id: 13, date: '10/06/2022', title: 'Entramos na Academia', description: 'Mesmo com os “Gengis Khan”, as “pernas de passarinho” e a louca da rua, treinar com minha parceira de academia fazia tudo ser mais divertido. Sinto falta de malharmos juntos, amor. Precisamos voltar hehe.', position: { top: '35%', left: '90%' }, size: 'default' },
+        { id: 14, date: '10/01/2025', title: 'Nossa Casinha Própria', description: 'Depois de tanto tempo, finalmente conseguimos a nossa própria casinha. Um espaço só nosso. Nem sempre é fácil, mas vale cada segundo. E esse foi só o primeiro passo da nossa vida real-juntos-oficial.', position: { top: '50%', left: '50%' }, size: 'default' },
+        
+        // Aniversários
+        { id: 15, date: '15/07/2021', title: 'Nosso 1º Aniversário', description: 'Um ano que passou voando. Cheio de mensagens, ligações no WhatsApp, e momentos que viraram meus favoritos. Tudo o que a gente mais sonhava era poder ficar juntos o tempo todo — e cada instante contigo era o mais precioso.', position: { top: '69%', left: '53%' }, size: 'large' },
+        { id: 16, date: '15/07/2022', title: 'Nosso 2º Aniversário', description: 'Dois anos construindo a base do nosso relacionamento. Nosso primeiro ano morando juntos. A gente ainda tava, tecnicamente, se conhecendo… mas eu já sabia que queria passar minha vida com você. PS: ir pra academia contigo era muito divertido kkkkk.', position: { top: '45%', left: '65%' }, size: 'large' },
+        { id: 17, date: '15/07/2023', title: 'Nosso 3º Aniversário', description: 'Sendo bem sincero, mozi… não lembro direito como foi nosso terceiro ano kkkkk. Mas lembro que, mesmo dividindo a casa com minha família, morar contigo fez daqueles dias os melhores da minha vida.', position: { top: '30%', left: '50%' }, size: 'large' },
+        { id: 18, date: '15/07/2024', title: 'Nosso 4º Aniversário', description: 'Quatro anos, três morando juntos. A essa altura, nosso amor já era algo sólido, e eu tinha certeza de que duraria muitos e muitos anos. Não foi um ano fácil pra gente — mas foi um dos mais necessários pra chegarmos até aqui. ❤️', position: { top: '50%', left: '40%' }, size: 'large' },
+        { id: 19, date: '15/07/2025', title: 'Nosso 5º Aniversário!', description: 'Cinco anos. Meia década, mozi! E aqui estamos: com nosso filhinho, nossa casa, mandando bem nos trabalhos que a gente tanto queria, e um futuro brilhante pela frente. Tudo o que eu mais quero é viver essa vida com você. Nem sempre vai ser fácil, mas eu sempre estarei do teu lado. Te amo pra sempre, amor. ❤️❤️', position: { top: '20%', left: '80%' }, size: 'large' },
+        
+        // Conquistas Pessoais
+        { id: 20, date: '2021', title: 'Terminei a Faculdade de Letras', description: '', position: { top: '5%', left: '30%' }, size: 'small' },
+        { id: 21, date: '2021', title: 'Você fez seu primeiro Curso de Massoterapia (online)', description: '', position: { top: '95%', left: '5%' }, size: 'small' },
+        { id: 22, date: '2022', title: 'Entrei na Trybe', description: '', position: { top: '8%', left: '65%' }, size: 'small' },
+        { id: 23, date: '2022', title: 'Você teve suas ilustrações publicadas em um livro', description: '', position: { top: '15%', left: '50%' }, size: 'small' },
+        { id: 24, date: '2022', title: 'Concluiu seu Estágio de Massoterapia', description: '', position: { top: '90%', left: '95%' }, size: 'small' },
+        { id: 25, date: '2023', title: 'Terminei a Trybe', description: '', position: { top: '55%', left: '5%' }, size: 'small' },
+        { id: 26, date: '2024', title: 'Entrei na Athon', description: '', position: { top: '50%', left: '95%' }, size: 'small' },
+        { id: 27, date: '2024', title: 'Concluiu seu curso do Marcelo Doi', description: '', position: { top: '8%', left: '40%' }, size: 'small' },
+        { id: 28, date: '2024', title: 'Você entrou no Tera Spa', description: '', position: { top: '5%', left: '5%' }, size: 'small' },
+        { id: 29, date: '2024', title: 'Eu ganhei o MBA', description: '', position: { top: '95%', left: '60%' }, size: 'small' },
+        { id: 30, date: '2024', title: 'Consegui meu Emprego de Programador', description: '', position: { top: '60%', left: '45%' }, size: 'small' },
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const sky = document.getElementById('sky');
+        const svgLines = document.getElementById('constellation-lines');
+        const starElements = [];
+
+        function init() {
+            setupIntro();
+            createStars();
+            setTimeout(drawConstellationLines, CONFIG.introFadeOutDelay + 500);
+            setupEventListeners();
+            setupParallax();
+        }
+
+        function setupIntro() {
+            const intro = document.getElementById('intro');
+            setTimeout(() => intro.classList.add('hidden'), CONFIG.introFadeOutDelay);
+        }
+
+        function createStars() {
+            memories.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+            memories.forEach(memory => {
+                const star = document.createElement('div');
+                star.className = `star ${memory.size}`;
+                star.style.top = memory.position.top;
+                star.style.left = memory.position.left;
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                star.memoryData = memory;
+                
+                if (memory.size === 'small') {
+                    setupTooltipEvents(star, memory);
+                } else {
+                    star.addEventListener('click', () => openMemoryModal(memory));
+                }
+                
+                sky.appendChild(star);
+                starElements.push(star);
+            });
+        }
+        
+        // MELHORIA: Lógica do tooltip para se manter na tela
+        function setupTooltipEvents(star, memory) {
+            let tooltip = null;
+            star.addEventListener('mouseenter', () => {
+                if (tooltip) return;
+                
+                tooltip = document.createElement('div');
+                tooltip.className = 'star-tooltip';
+                tooltip.textContent = memory.title;
+                sky.appendChild(tooltip);
+
+                const starRect = star.getBoundingClientRect();
+                const skyRect = sky.getBoundingClientRect();
+                const tooltipRect = tooltip.getBoundingClientRect();
+
+                // Centraliza o tooltip verticalmente com a estrela
+                let top = starRect.top - skyRect.top + (starRect.height / 2) - (tooltipRect.height / 2);
+                let left;
+
+                // Verifica se a estrela está na metade direita da tela
+                if (starRect.left > window.innerWidth / 2) {
+                    // Posiciona à esquerda da estrela
+                    left = starRect.left - skyRect.left - tooltipRect.width - 15; // 15px de espaço
+                } else {
+                    // Posiciona à direita da estrela
+                    left = starRect.right - skyRect.left + 15; // 15px de espaço
+                }
+                
+                tooltip.style.top = `${top}px`;
+                tooltip.style.left = `${left}px`;
+                
+                getComputedStyle(tooltip).opacity; 
+                
+                tooltip.style.opacity = '1';
+                tooltip.style.transform = 'scale(1)';
+            });
+
+            star.addEventListener('mouseleave', () => {
+                if (tooltip) {
+                    tooltip.style.opacity = '0';
+                    tooltip.style.transform = 'scale(0.9)';
+                    tooltip.addEventListener('transitionend', () => {
+                        tooltip.remove();
+                        tooltip = null;
+                    }, { once: true });
+                }
+            });
+        }
+
+        function drawConstellationLines() {
+            svgLines.innerHTML = '';
+            const skyRect = sky.getBoundingClientRect();
+            const mainConstellationStars = starElements.filter(star => star.memoryData.size !== 'small');
+
+            for (let i = 0; i < mainConstellationStars.length - 1; i++) {
+                const startStar = mainConstellationStars[i].getBoundingClientRect();
+                const endStar = mainConstellationStars[i + 1].getBoundingClientRect();
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', startStar.left + startStar.width / 2 - skyRect.left);
+                line.setAttribute('y1', startStar.top + startStar.height / 2 - skyRect.top);
+                line.setAttribute('x2', endStar.left + endStar.width / 2 - skyRect.left);
+                line.setAttribute('y2', endStar.top + endStar.height / 2 - skyRect.top);
+                
+                line.style.animationDuration = `${CONFIG.lineDrawDuration}s`;
+                line.style.animationDelay = `${i * CONFIG.lineDrawDuration}s`;
+
+                svgLines.appendChild(line);
+            }
+        }
+
+        function setupEventListeners() {
+            window.addEventListener('resize', drawConstellationLines);
+            setupModal('memoryModal', 'closeButton');
+            // setupModal('letterModal', 'closeLetterButton', 'letterButton');
+            setupMusicPlayer();
+        }
+
+        function setupParallax() {
+            const parallaxLayers = document.querySelectorAll('.parallax-bg');
+            document.body.addEventListener('mousemove', e => {
+                const { clientX, clientY } = e;
+                const x = (clientX / window.innerWidth - 0.5) * 2;
+                const y = (clientY / window.innerHeight - 0.5) * 2;
+                sky.style.transform = `translate(${x * 10}px, ${y * 10}px)`;
+                parallaxLayers[0].style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+                parallaxLayers[1].style.transform = `translate(${x * 35}px, ${y * 35}px)`;
+                if (parallaxLayers[2]) {
+                    parallaxLayers[2].style.transform = `translate(${x * 50}px, ${y * 50}px)`;
+                }
+                if (parallaxLayers[3]) { // NOVO: Movimenta a quarta camada
+                    parallaxLayers[3].style.transform = `translate(${x * 65}px, ${y * 65}px)`;
+                }
+            });
+        }
+        
+        function parseDate(dateStr) {
+            if (/^\d{4}$/.test(dateStr)) {
+                return new Date(dateStr, 0, 1);
+            }
+            const [day, month, year] = dateStr.split('/');
+            return new Date(year, month - 1, day);
+        }
+
+        function openMemoryModal(memory) {
+            document.getElementById('modalDate').textContent = memory.date || '';
+            document.getElementById('modalTitle').textContent = memory.title || '';
+            document.getElementById('modalDescription').textContent = memory.description || '';
+            document.getElementById('memoryModal').classList.remove('hidden');
+        }
+
+        function setupModal(modalId, closeButtonId, openButtonId = null) {
+            const modal = document.getElementById(modalId);
+            const closeButton = document.getElementById(closeButtonId);
+            
+            if (openButtonId) {
+                document.getElementById(openButtonId).addEventListener('click', () => modal.classList.remove('hidden'));
+            }
+
+            closeButton.addEventListener('click', () => modal.classList.add('hidden'));
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) modal.classList.add('hidden');
+            });
+        }
+        
+        function setupMusicPlayer() {
+            const music = document.getElementById('bgMusic');
+            const volumeControl = document.getElementById('volumeControl');
+            const volumeIcon = document.getElementById('volumeIcon');
+            
+            music.play().catch(error => {
+                console.log("A reprodução automática foi bloqueada pelo navegador.");
+            });
+            
+            volumeControl.addEventListener('click', () => {
+                music.muted = !music.muted;
+                if(music.paused) {
+                    music.play();
+                }
+                volumeIcon.className = music.muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+            });
+        }
+
+        init();
+    });
+  </script>
+</body>
+</html>
