@@ -1,0 +1,163 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    color: #c9d1d9;
+    /* IMAGEM DE FUNDO E TRANSIÇÃO PARA PARALLAX */
+    background: url('https://i.postimg.cc/Vs3wv8rm/Background-6.png') center center;
+    background-size: auto;
+    transition: background-position 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* --- EFEITO PARALLAX --- */
+.fundo-parallax {
+    position: absolute;
+    width: 110%;
+    height: 110%;
+    top: -5%;
+    left: -5%;
+    background-image:
+        radial-gradient(1px 1px at 25% 25%, #fff, transparent),
+        radial-gradient(1px 1px at 50% 50%, #fff, transparent),
+        radial-gradient(0.5px 0.5px at 75% 75%, #fff, transparent);
+    background-size: 300px 300px;
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fundo-parallax.camada2 {
+    background-size: 600px 600px;
+    transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fundo-parallax.camada3 {
+    background-image: radial-gradient(0.5px 0.5px at 10% 90%, #aaa, transparent);
+    background-size: 150px 150px;
+    opacity: 0.6;
+    transition: transform 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fundo-parallax.camada4 {
+    background-image: radial-gradient(0.25px 0.25px at 33% 66%, #999, transparent);
+    background-size: 80px 80px;
+    opacity: 0.5;
+    transition: transform 2.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fundo-parallax.camada5 {
+    background-image: radial-gradient(0.5px 0.5px at 80% 15%, #aaa, transparent);
+    background-size: 450px 450px;
+    opacity: 0.4;
+    transition: transform 2.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fundo-parallax.camada6 {
+    background-image: radial-gradient(0.25px 0.25px at 5% 55%, #999, transparent);
+    background-size: 200px 200px;
+    opacity: 0.3;
+    transition: transform 3.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* --- INTRODUÇÃO --- */
+#introducao {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0d1117;
+    z-index: 100;
+    font-size: 1.5rem;
+    opacity: 1;
+    transition: opacity 2s ease-in-out;
+}
+
+#introducao.escondido {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* --- CONSTELAÇÃO --- */
+#ceu {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.estrela {
+    position: absolute;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.4s ease-out, box-shadow 0.4s ease-in-out;
+    animation: pulsar 3s infinite ease-in-out;
+}
+.estrela.padrao { width: 12px; height: 12px; background-color: #c9d1d9; }
+.estrela.pequena { width: 8px; height: 8px; background-color: #a0a8b1; animation-duration: 4s; }
+.estrela.grande { width: 18px; height: 18px; background-color: #e6edf3; animation-duration: 2s; }
+
+.estrela:hover {
+    transform: scale(2.2) !important;
+    box-shadow: 0 0 14px #00e1ff, 0 0 22px #00e1ff, 0 0 30px #00e1ff !important;
+}
+
+@keyframes pulsar {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 8px rgba(0, 225, 255, 0.7); }
+    50% { transform: scale(1.15); box-shadow: 0 0 14px rgba(0, 225, 255, 1), 0 0 22px rgba(0, 225, 255, 0.8); }
+}
+
+#linhas-constelacao {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+}
+
+#linhas-constelacao line {
+    stroke: rgba(0, 225, 255, 0.3);
+    stroke-width: 1.5px;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation-name: desenhar-linha;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes desenhar-linha { to { stroke-dashoffset: 0; } }
+
+.dica-estrela {
+    position: absolute;
+    color: #c9d1d9;
+    font-size: 0.875rem;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    white-space: nowrap;
+}
+
+/* --- MODAIS --- */
+.modal-overlay {
+    opacity: 1;
+    transition: opacity 0.4s ease-out;
+}
+
+.modal-conteudo {
+    background-color: rgba(22, 27, 34, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(48, 54, 61, 0.5);
+    opacity: 1;
+    transform: scale(1);
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease-out;
+}
+
+.modal-overlay.escondido {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-overlay.escondido .modal-conteudo {
+    transform: scale(0.95);
+    opacity: 0;
+}
