@@ -6,7 +6,6 @@ body, html {
     overflow: hidden;
     font-family: 'Inter', sans-serif;
     color: #c9d1d9;
-    /* IMAGEM DE FUNDO E TRANSIÇÃO PARA PARALLAX */
     background: url('https://i.postimg.cc/Vs3wv8rm/Background-6.png') center center;
     background-size: auto;
     transition: background-position 0.3s cubic-bezier(0.22, 1, 0.36, 1);
@@ -61,23 +60,15 @@ body, html {
 }
 
 /* --- INTRODUÇÃO --- */
-#introducao {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #0d1117;
-    z-index: 100;
-    font-size: 1.5rem;
-    opacity: 1;
-    transition: opacity 2s ease-in-out;
+#texto-inicial {
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
 }
 
-#introducao.escondido {
-    opacity: 0;
-    pointer-events: none;
+#texto-inicial.visivel {
+    opacity: 1;
 }
+
 
 /* --- CONSTELAÇÃO --- */
 #ceu {
@@ -160,4 +151,21 @@ body, html {
 .modal-overlay.escondido .modal-conteudo {
     transform: scale(0.95);
     opacity: 0;
+}
+
+@keyframes ripple-effect {
+    to {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.ripple {
+    position: fixed;
+    z-index: 101;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple-effect 2s ease-out; 
+    background-color: rgba(0, 52, 110, 0.4); 
+    pointer-events: none;
 }

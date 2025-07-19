@@ -7,17 +7,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div id="introducao">
-        <p>Desenhando a nossa história...</p>
-    </div>
-
-    <!-- CAMADAS DO PARALLAX -->
+    
     <div class="fundo-parallax camada1"></div>
     <div class="fundo-parallax camada2"></div>
     <div class="fundo-parallax camada3"></div>
@@ -39,12 +34,12 @@
     </div>
     
     <div class="fixed bottom-4 left-4 z-50 flex items-center gap-3">
-        <button id="controleVolume" class="bg-cyan-600 text-white w-12 h-12 rounded-full shadow-lg hover:bg-cyan-500 transition flex items-center justify-center text-xl">
+        <button id="controleVolume" class="bg-black-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-xl transition-opacity duration-300 opacity-60 hover:opacity-100">
             <i id="iconeVolume" class="fa-solid fa-volume-xmark"></i>
         </button>
     </div>
 
-    <audio id="musicaFundo" src="https://github.com/L-E-V-A/leva-off/raw/main/Eternity.mp3" loop autoplay muted></audio>
+    <audio id="musicaFundo" src="Giovanna - Staffan Carlén.mp3" loop muted></audio>
 
     <script src="script.js"></script>
 </body>
